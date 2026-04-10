@@ -1,5 +1,3 @@
-dist/
 session.db
 .wapclip/
 *.log
-*.exe

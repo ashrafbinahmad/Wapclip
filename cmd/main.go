@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/ashrafbinahmad/wapclip/internal/config"
@@ -40,6 +41,8 @@ func main() {
 	switch cmd {
 	case "init":
 		runInit()
+	case "start":
+		runStart()
 	case "daemon":
 		runDaemon()
 	case "log":
@@ -132,6 +135,10 @@ func runInit() {
 	client.Disconnect()
 
 	// Automatically start daemon so user doesn't have to wait for next login
+	runStart()
+}
+
+func runStart() {
 	exe, _ := os.Executable()
 	var runCmd *exec.Cmd
 	if strings.Contains(exe, "go-build") || strings.HasPrefix(filepath.Base(exe), "main") || strings.HasPrefix(filepath.Base(exe), "wapclip") == false {
@@ -140,9 +147,11 @@ func runInit() {
 		runCmd = exec.Command(exe, "daemon")
 	}
 
+	setDaemonAttributes(runCmd)
+
 	if err := runCmd.Start(); err != nil {
 		fmt.Printf("Warning: failed to start daemon immediately: %v\n", err)
-		fmt.Println("You can start it manually with: npm run daemon")
+		fmt.Println("You can start it manually with: wapclip start")
 	} else {
 		fmt.Println("Daemon started successfully in the background!")
 	}
@@ -185,6 +194,11 @@ func runDaemon() {
 		os.Exit(1)
 	}
 
+	var notifyMut sync.Mutex
+	var notifyCount int
+	var notifyTimer *time.Timer
+	var lastText string
+
 	client.AddEventHandler(func(evt interface{}) {
 		switch v := evt.(type) {
 		case *events.Message:
@@ -195,7 +209,27 @@ func runDaemon() {
 				}
 				if text != "" {
 					clipboard.Write(clipboard.FmtText, []byte(text))
-					beeep.Notify("WapClip 📋", "Copied: "+truncate(text, 60), "")
+					
+					notifyMut.Lock()
+					notifyCount++
+					lastText = text
+					if notifyTimer != nil {
+						notifyTimer.Stop()
+					}
+					notifyTimer = time.AfterFunc(1500*time.Millisecond, func() {
+						notifyMut.Lock()
+						count := notifyCount
+						textToShow := lastText
+						notifyCount = 0
+						notifyMut.Unlock()
+
+						if count == 1 {
+							beeep.Notify("WapClip 📋", "Copied: "+truncate(textToShow, 60), "")
+						} else if count > 1 {
+							beeep.Notify("WapClip 📋", fmt.Sprintf("Copied %d new items. Latest: %s", count, truncate(textToShow, 40)), "")
+						}
+					})
+					notifyMut.Unlock()
 				}
 			}
 		case *events.LoggedOut:

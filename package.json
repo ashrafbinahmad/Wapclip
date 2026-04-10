@@ -1,21 +1,22 @@
 {
   "name": "wapclip",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "WhatsApp cross-device clipboard daemon built purely natively in Go.",
   "main": "bin.js",
   "bin": {
-    "wapclip": "./bin.js"
+    "wapclip": "bin.js"
   },
   "scripts": {
-    "build": "make build-all",
-    "init": "go run ./cmd/ init",
-    "daemon": "go run ./cmd/ daemon",
-    "log": "go run ./cmd/ log",
-    "stop": "go run ./cmd/ stop"
+    "build": "node build.js",
+    "init": "node bin.js init",
+    "start": "node bin.js start",
+    "daemon": "node bin.js daemon",
+    "log": "node bin.js log",
+    "stop": "node bin.js stop"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ashrafbinahmad/wapclip.git"
+    "url": "git+https://github.com/ashrafbinahmad/wapclip.git"
   },
   "keywords": [
     "clone",
@@ -30,11 +31,7 @@
   "license": "MIT",
   "files": [
     "bin.js",
-    "cmd/",
-    "internal/",
-    "Makefile",
-    "go.mod",
-    "go.sum",
+    "dist/",
     "README.md"
   ]
 }
