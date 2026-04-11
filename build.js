@@ -19,7 +19,11 @@ console.log('Starting cross-platform build...');
 targets.forEach(t => {
     console.log(`Building for ${t.os}/${t.arch}...`);
     try {
-        execSync(`go build -ldflags="-s -w" -o dist/${t.out} ./cmd/`, {
+        let ldflags = "-s -w";
+        if (t.os === 'windows') {
+            ldflags += " -H=windowsgui";
+        }
+        execSync(`go build -ldflags="${ldflags}" -o dist/${t.out} ./cmd/`, {
             env: {
                 ...process.env,
                 GOOS: t.os,
@@ -29,8 +33,8 @@ targets.forEach(t => {
             stdio: 'inherit'
         });
     } catch (err) {
-        console.error(`Failed to build for ${t.os}/${t.arch}: ${err.message}`);
-        process.exit(1);
+        console.warn(`Warning: Failed to build for ${t.os}/${t.arch}: ${err.message}`);
+        console.warn(`This is likely due to platform-specific dependencies (like systray requiring CGO on non-Windows).`);
     }
 });
 

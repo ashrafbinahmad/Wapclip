@@ -12,3 +12,5 @@ func setDaemonAttributes(cmd *exec.Cmd) {
 		Setsid: true,
 	}
 }
+
+func attachConsole() {}

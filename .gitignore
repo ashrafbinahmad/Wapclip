@@ -1,1 +1,6 @@
 /dist
+/main.exe
+*.exe
+node_modules/
+.wapclip/
+ session.db*

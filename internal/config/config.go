@@ -8,7 +8,9 @@ import (
 )
 
 type Config struct {
-	GroupJID string `json:"group_jid"`
+	GroupJID   string `json:"group_jid"`
+	SaveMedia  bool   `json:"save_media"`
+	MediaLimit int    `json:"media_limit"`
 }
 
 func getPath() (string, error) {

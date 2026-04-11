@@ -12,7 +12,16 @@
     "start": "node bin.js start",
     "daemon": "node bin.js daemon",
     "log": "node bin.js log",
-    "stop": "node bin.js stop"
+    "stop": "node bin.js stop",
+    "cleanup": "node bin.js cleanup",
+    "info": "node bin.js info",
+    "dev:init": "set WAPCLIP_DEV=1&& node bin.js init",
+    "dev:start": "set WAPCLIP_DEV=1&& node bin.js start",
+    "dev:daemon": "set WAPCLIP_DEV=1&& node bin.js daemon",
+    "dev:log": "set WAPCLIP_DEV=1&& node bin.js log",
+    "dev:stop": "set WAPCLIP_DEV=1&& node bin.js stop",
+    "dev:cleanup": "set WAPCLIP_DEV=1&& node bin.js cleanup",
+    "dev:info": "set WAPCLIP_DEV=1&& node bin.js info"
   },
   "repository": {
     "type": "git",
