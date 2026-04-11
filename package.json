@@ -1,6 +1,6 @@
 {
   "name": "wapclip",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "WhatsApp cross-device clipboard daemon built purely natively in Go.",
   "main": "bin.js",
   "bin": {

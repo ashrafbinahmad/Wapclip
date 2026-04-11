@@ -4,3 +4,4 @@
 node_modules/
 .wapclip/
  session.db*
+.env
