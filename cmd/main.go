@@ -41,7 +41,7 @@ func truncate(s string, n int) string {
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Fprintf(os.Stderr, "Usage: wapclip <init|start|daemon|log|stop|info>\n")
+		runHelp()
 		os.Exit(1)
 	}
 
@@ -65,8 +65,10 @@ func main() {
 		runCleanup()
 	case "info":
 		runInfo()
+	case "help", "--help", "-h":
+		runHelp()
 	default:
-		fmt.Fprintf(os.Stderr, "Unknown command: %s\n", cmd)
+		fmt.Fprintf(os.Stderr, "Unknown command: %s. Run 'wapclip help' for usage.\n", cmd)
 		os.Exit(1)
 	}
 }
@@ -512,6 +514,23 @@ func runInfo() {
 	} else {
 		fmt.Println("Successfully sent info message to the group.")
 	}
+}
+
+func runHelp() {
+	fmt.Println("📋 WapClip — WhatsApp Cross-Device Clipboard Sync")
+	fmt.Println("\nUsage:")
+	fmt.Println("  wapclip <command> [arguments]")
+	fmt.Println("\nAvailable Commands:")
+	fmt.Println("  init     Initialize WapClip — link WhatsApp and setup synchronization")
+	fmt.Println("  start    Start the clipboard sync daemon in the background")
+	fmt.Println("  stop     Stop the background clipboard sync daemon")
+	fmt.Println("  log      Watch the background daemon logs in real-time")
+	fmt.Println("  info     Show current configuration and test connection")
+	fmt.Println("  cleanup  Completely remove WapClip (stops daemon, removes config and startup)")
+	fmt.Println("  help     Show this help message")
+	fmt.Println("\nFlags:")
+	fmt.Println("  -h, --help  Show this help message")
+	fmt.Println("\nWebsite: https://github.com/ashrafbinahmad/wapclip")
 }
 func manageMediaLimit(dir string, limit int) {
 	if limit <= 0 {

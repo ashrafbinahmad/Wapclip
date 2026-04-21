@@ -1,6 +1,6 @@
 {
   "name": "wapclip",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "WhatsApp cross-device clipboard daemon built purely natively in Go.",
   "main": "bin.js",
   "bin": {
@@ -15,13 +15,15 @@
     "stop": "node bin.js stop",
     "cleanup": "node bin.js cleanup",
     "info": "node bin.js info",
+    "help": "node bin.js help",
     "dev:init": "set WAPCLIP_DEV=1&& node bin.js init",
     "dev:start": "set WAPCLIP_DEV=1&& node bin.js start",
     "dev:daemon": "set WAPCLIP_DEV=1&& node bin.js daemon",
     "dev:log": "set WAPCLIP_DEV=1&& node bin.js log",
     "dev:stop": "set WAPCLIP_DEV=1&& node bin.js stop",
     "dev:cleanup": "set WAPCLIP_DEV=1&& node bin.js cleanup",
-    "dev:info": "set WAPCLIP_DEV=1&& node bin.js info"
+    "dev:info": "set WAPCLIP_DEV=1&& node bin.js info",
+    "dev:help": "set WAPCLIP_DEV=1&& node bin.js help"
   },
   "repository": {
     "type": "git",

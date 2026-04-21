@@ -1,6 +1,7 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 const distDir = path.join(__dirname, 'dist');
 if (!fs.existsSync(distDir)) {
@@ -23,12 +24,16 @@ targets.forEach(t => {
         if (t.os === 'windows') {
             ldflags += " -H=windowsgui";
         }
+
+        // Enable CGO only when building for Windows on a Windows host to support systray
+        const cgoEnabled = (os.platform() === 'win32' && t.os === 'windows') ? '1' : '0';
+
         execSync(`go build -ldflags="${ldflags}" -o dist/${t.out} ./cmd/`, {
             env: {
                 ...process.env,
                 GOOS: t.os,
                 GOARCH: t.arch,
-                CGO_ENABLED: '0'
+                CGO_ENABLED: cgoEnabled
             },
             stdio: 'inherit'
         });
