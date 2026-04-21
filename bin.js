@@ -38,9 +38,21 @@ if (isDev) {
         console.error(`Please compile it first via 'npm run build' or check your installation.`);
         process.exit(1);
     }
+
+    // Ensure executable permissions on Unix-like systems
+    if (platform !== 'win32') {
+        try {
+            const stats = fs.statSync(executable);
+            if (!(stats.mode & fs.constants.S_IXUSR)) {
+                fs.chmodSync(executable, 0o755);
+            }
+        } catch (err) {
+            // Silently fail if we can't chmod, spawn will fail anyway with a better error
+        }
+    }
 }
 
-const child = spawn(executable, args, { stdio: 'inherit', shell: platform === 'win32' && isDev });
+const child = spawn(executable, args, { stdio: 'inherit' });
 
 child.on('error', (err) => {
     console.error(`Failed to start wapclip: ${err.message}`);
